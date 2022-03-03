@@ -1,2 +1,2 @@
 #!/bin/bash
-echo $(readlink -m pwd)
+echo $(readlink -m $PWD)
