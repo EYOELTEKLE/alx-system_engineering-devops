@@ -1,2 +1,2 @@
 #!/bin/bash
-echo $(readlink -m 0x00-shell_basics)
+echo $(readlink -m pwd)
