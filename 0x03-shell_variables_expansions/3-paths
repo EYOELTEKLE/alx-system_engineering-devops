@@ -1,2 +1,2 @@
 #!/bin/bash
-echo “${PATH//:/$'\n'}” | wc -l
+tr ':' ' ' <<< $PATH | wc -w
