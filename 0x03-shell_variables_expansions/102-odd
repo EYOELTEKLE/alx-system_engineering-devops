@@ -1,0 +1,2 @@
+#!/bin/bash
+split -n r/2/2
