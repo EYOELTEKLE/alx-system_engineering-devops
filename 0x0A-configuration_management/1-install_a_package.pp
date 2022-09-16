@@ -1,7 +1,7 @@
 # puppet project
 
 
-package {'Flask':
+package {'flask':
   ensure   => '2.1.1',
-  provider => 'pip',
+  provider => 'pip3',
 }
