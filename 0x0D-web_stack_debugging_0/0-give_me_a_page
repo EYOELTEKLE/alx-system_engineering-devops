@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
-# run apache on holbertonschool/265-0 container
-
-echo "ServerName localhost" >> /etc/apache2.conf
+# fixes an apache server in a container
 service apache2 start
