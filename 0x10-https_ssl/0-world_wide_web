@@ -1,44 +1,18 @@
 #!/usr/bin/env bash
-# Configure my domain zone:
-# www --> 3710-lb-01 3.237.19.150 
-# web-01 --> 3710-web-01 35.174.60.179
-# web-02 --> 3710-web-02 3.236.72.194
+#Configure your domain zone so that the subdomain www and display information about subdomains
 
-# -- To be evaluated --
-# domain_information () {
-#     line=$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:' | tr '\t' '\n' | tail -2 | tr '\n' ' ')
-#     echo "$2 $line" | awk '{print "The subdomain " $1 " is a " $2 " record and points to " $3}'
-# }
-
-# if [ "$#" == 1 ]
-# then
-#   domain_information "$1" "www"
-#   domain_information "$1" "lb-01"
-#   domain_information "$1" "web-01"
-#   domain_information "$1" "web-02"
-# elif [ "$#" == 2 ]
-# then
-#   domain_information "$1" "$2"
-# fi
-#-- To be evaluated --
-
-subdomains_all=( "www" "lb-01" "web-01" "web-02" )
-
-runDig () {
-    subdomain=$1
-    domain=$2
-
-    dig "$subdomain.$domain" | grep -A1 'ANSWER SECTION:' | tail -1 | awk -v s="$subdomain" 'BEGIN { FS = " " } ; { print "The subdomain " s " is a " $4 " record and points to " $5 }'
-}
-
-if [ $# -eq 1 ]; then
-    domain="$1"
-    for i in "${subdomains_all[@]}"
+if [ "$#" = 1 ]
+then
+    subdomains=("www" "lb-01" "web-01" "web-02")
+    for sub_domain in "${subdomains[@]}"
     do
-	runDig "$i" "$domain"
+	record_type=$(dig $sub_domain.$1 | grep -A1 'ANSWER SECTION' | tail -1 | awk '{print $4}')
+        destination=$(dig $sub_domain.$1 | grep -A1 'ANSWER SECTION' | tail -1 | awk '{print $5}')
+	echo "The subdomain $sub_domain is a $record_type record and points to $destination"
     done
-elif [ $# -eq 2 ]; then
-    domain="$1"
-    subdomain="$2"
-    runDig "$subdomain" "$domain"
+elif [ "$#" = 2 ]
+then
+    record_type=$(dig $2.$1 | grep -A1 'ANSWER SECTION' | tail -1 | awk '{print $4}')
+    destination=$(dig $2.$1 | grep -A1 'ANSWER SECTION' | tail -1 | awk '{print $5}')
+    echo "The subdomain $2 is a $record_type record and points to $destination"
 fi
